@@ -9,7 +9,7 @@ from conf import LINK_LIGA  # Import LINK_LIGA from the 'conf' module
 
 # Get current year from current date
 year = datetime.now().year
-locale.setlocale(locale.LC_ALL, 'pt_pt.UTF-8')  # Set the locale to handle Portuguese date format
+locale.setlocale(locale.LC_ALL, 'pt_PT.UTF-8')  # Set the locale to handle Portuguese date format
 
 # Fetch the content of the web page using requests
 web_page_content = requests.get(LINK_LIGA).content
