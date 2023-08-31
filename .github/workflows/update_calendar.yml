@@ -1,0 +1,38 @@
+name: 📅 Update Calendar
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Every Sunday at 00:00
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  update-calendar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📀 Checks Repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v3.1.2
+
+      - name: 📦 Install project requirements
+        run: pip install -r requirements.txt
+
+      - name: 📅 Export data to file
+        run: python main.py
+
+      - name: 📎 Commit gas information with history
+        run: |
+          git config --global user.name 'Dntfreitas'
+          git config --global user.email 'dntfreitas123@gmail.com'
+          git fetch && git pull --ff-only
+          git add calendar.ics
+          git diff-index --quiet HEAD || git commit -m "(📅): updated on `date +'%Y-%m-%d %H:%M:%S'`"
+          git push
