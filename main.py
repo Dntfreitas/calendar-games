@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
-from pytz import UTC, timezone
 
 from conf import LINK_LIGA  # Import LINK_LIGA from the 'conf' module
 
@@ -41,15 +40,12 @@ for tr in trs:
     date, time = date_time.split(" ")
     hour, minute = time.replace("H", ":").split(":")
     date = datetime.strptime(date, "%d/%b")
-    # set timezone to Europe/Lisbon
-    date = timezone("Europe/Lisbon").localize(date)
     if date.month in current_year_months:
         date = date.replace(year=year)
     else:
         date = date.replace(year=year + 1)
-
     # Format the start and end datetime strings
-    date = date.replace(hour=int(hour), minute=int(minute)).astimezone(UTC)
+    date = date.replace(hour=int(hour) - 1, minute=int(minute))
     dstart = date.strftime("%Y%m%dT%H%M%SZ")
     dtend = (date + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%SZ")
 
