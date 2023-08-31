@@ -11,6 +11,10 @@ from conf import LINK_LIGA  # Import LINK_LIGA from the 'conf' module
 year = datetime.now().year
 locale.setlocale(locale.LC_ALL, 'pt_PT.UTF-8')  # Set the locale to handle Portuguese date format
 
+# Since there is no year information
+current_year_months = [7, 8, 9, 10, 11, 12]
+next_year_months = [1, 2, 3, 4, 5, 6]
+
 # Fetch the content of the web page using requests
 web_page_content = requests.get(LINK_LIGA).content
 
@@ -35,11 +39,15 @@ for tr in trs:
     # Split date and hour, and format them
     date, hour = date_time.split(" ")
     hour = hour.replace("H", ":")
-    date = datetime.strptime(f"{date}/{year}", "%d/%b/%Y").strftime("%d/%m/%Y")
+    date = datetime.strptime(date, "%d/%b")
+    if date.month in current_year_months:
+        date = date.replace(year=year)
+    else:
+        date = date.replace(year=year + 1)
 
     # Format the start and end datetime strings
-    dstart = datetime.strptime(f"{date} {hour}", "%d/%m/%Y %H:%M").strftime("%Y%m%dT%H%M%SZ")
-    dtend = (datetime.strptime(dstart, "%Y%m%dT%H%M%SZ") + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%SZ")
+    dstart = date.strftime("%Y%m%dT%H%M%S")
+    dtend = (date + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%S")
 
     # Extract team names and create game summary and location
     op1 = tr.find("span", class_="hidden-md-down").text
