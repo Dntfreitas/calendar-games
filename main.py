@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
+from pytz import UTC
 
 from conf import LINK_LIGA  # Import LINK_LIGA from the 'conf' module
 
@@ -46,7 +47,7 @@ for tr in trs:
         date = date.replace(year=year + 1)
 
     # Format the start and end datetime strings
-    date = date.replace(hour=int(hour), minute=int(minute))
+    date = date.replace(hour=int(hour), minute=int(minute)).astimezone(UTC)
     dstart = date.strftime("%Y%m%dT%H%M%SZ")
     dtend = (date + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%SZ")
 
@@ -57,7 +58,7 @@ for tr in trs:
     location = f"Estádio do {op1}"
 
     # Create a unique ID for the game using date and team names
-    uid = f"{date}-{summary.replace(' ', '-')}"
+    uid = f"{date.strftime('%Y%m%d')}_{op1.replace(' ', '_')}_{op2.replace(' ', '_')}"
 
     # Append the game details to the 'games' list as a dictionary
     games.append({
