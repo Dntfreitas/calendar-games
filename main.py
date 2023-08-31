@@ -37,8 +37,8 @@ for tr in trs:
         continue
 
     # Split date and hour, and format them
-    date, hour = date_time.split(" ")
-    hour = hour.replace("H", ":")
+    date, time = date_time.split(" ")
+    hour, minute = time.replace("H", ":").split(":")
     date = datetime.strptime(date, "%d/%b")
     if date.month in current_year_months:
         date = date.replace(year=year)
@@ -46,8 +46,9 @@ for tr in trs:
         date = date.replace(year=year + 1)
 
     # Format the start and end datetime strings
-    dstart = date.strftime("%Y%m%dT%H%M%S")
-    dtend = (date + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%S")
+    date = date.replace(hour=int(hour), minute=int(minute))
+    dstart = date.strftime("%Y%m%dT%H%M%SZ")
+    dtend = (date + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%SZ")
 
     # Extract team names and create game summary and location
     op1 = tr.find("span", class_="hidden-md-down").text
