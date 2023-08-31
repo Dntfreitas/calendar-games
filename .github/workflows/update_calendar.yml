@@ -25,6 +25,11 @@ jobs:
       - name: 📦 Install project requirements
         run: pip install -r requirements.txt
 
+      - name: 🌎 Set locale
+        run: |
+          sudo locale-gen pt_PT.UTF-8
+          sudo update-locale LANG=pt_PT.UTF-8
+
       - name: 📅 Export data to file
         run: python main.py
 
