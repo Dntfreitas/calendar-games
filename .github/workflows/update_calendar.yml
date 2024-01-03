@@ -33,11 +33,9 @@ jobs:
       - name: 📅 Export data to file
         run: python main.py
 
-      - name: 📎 Commit gas information with history
-        run: |
-          git config --global user.name 'Dntfreitas'
-          git config --global user.email 'dntfreitas123@gmail.com'
-          git fetch && git pull --ff-only
-          git add calendar.ics
-          git diff-index --quiet HEAD || git commit -m "(📅): updated on `date +'%Y-%m-%d %H:%M:%S'`"
-          git push
+      - name: 📅 Commit calendar information
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          message: "(📅): updated on `date +'%Y-%m-%d %H:%M:%S'`"

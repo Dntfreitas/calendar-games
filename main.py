@@ -5,10 +5,10 @@ from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 
-from conf import LINK_LIGA  # Import LINK_LIGA from the 'conf' module
+from conf import LINK_LIGA, CURRENT_SEASON  # Import LINK_LIGA from the 'conf' module
 
 # Get current year from current date
-year = datetime.now().year
+year_season = CURRENT_SEASON
 locale.setlocale(locale.LC_ALL, 'pt_PT.UTF-8')  # Set the locale to handle Portuguese date format
 
 # Since there is no year information
@@ -41,9 +41,9 @@ for tr in trs:
     hour, minute = time.replace("H", ":").split(":")
     date = datetime.strptime(date, "%d/%b")
     if date.month in current_year_months:
-        date = date.replace(year=year)
+        date = date.replace(year=year_season)
     else:
-        date = date.replace(year=year + 1)
+        date = date.replace(year=year_season + 1)
     # Format the start and end datetime strings
     date = date.replace(hour=int(hour), minute=int(minute))
     dstart = date.strftime("%Y%m%dT%H%M%SZ")
