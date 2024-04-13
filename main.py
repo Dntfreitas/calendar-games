@@ -45,7 +45,7 @@ for tr in trs:
     else:
         date = date.replace(year=year_season + 1)
     # Format the start and end datetime strings
-    date = date.replace(hour=int(hour), minute=int(minute))
+    date = date.replace(hour=int(hour)-1, minute=int(minute))
     dstart = date.strftime("%Y%m%dT%H%M%SZ")
     dtend = (date + timedelta(minutes=105)).strftime("%Y%m%dT%H%M%SZ")
 
